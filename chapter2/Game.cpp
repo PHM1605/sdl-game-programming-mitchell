@@ -32,7 +32,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			if (m_pRenderer != 0) {
 				std::cout << "renderer creation success\n";
 				SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255); // color white
-				m_textureManager.load("assets/animate-alpha.png");
+				if(!TheTextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer)) {
+					return false;
+				} 
 			}
 			else {
 				std::cout << "renderer init fail\n";
@@ -58,8 +60,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 void Game::render() {
 	// clear the window to pre-set color
 	SDL_RenderClear(m_pRenderer);
-	m_textureManager.draw("animate", 0, 0, 128, 82, m_pRenderer);
-	m_textureManager.drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
+	TheTextureManager::Instance()->draw("animate", 0, 0, 128, 82, m_pRenderer);
+	TheTextureManager::Instance()->drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
 
 	// show the window
 	SDL_RenderPresent(m_pRenderer);
@@ -81,7 +83,7 @@ void Game::handleEvents() {
 void Game::update() {
 	// SDL_GetTicks(): amount of ms since SDL initialized
 	// 100: jump to next frame after 100ms
-	m_sourceRectangle.x = 128 * int((SDL_GetTicks() / 100) % 6);
+	m_currentFrame = int((SDL_GetTicks() / 100)% 6);
 }
 
 void Game::clean() {
