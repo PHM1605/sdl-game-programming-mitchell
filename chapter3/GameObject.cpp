@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include "TextureManager.h"
 
 void GameObject::load(int x, int y, int width, int height, std::string textureID) {
 	m_x = x;
@@ -16,6 +15,12 @@ void GameObject::draw(SDL_Renderer* pRenderer) {
 }
 
 void GameObject::update() {
+	// SDL_GetTicks(): amount of ms since SDL initialized
+	// 100: jump to next frame after 100ms
+	m_currentFrame = int((SDL_GetTicks() / 100)% 6);
 	m_x += 1;
 }
 
+void GameObject::clean() {
+	std::cout << "clean GameObject\n";
+}

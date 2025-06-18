@@ -9,6 +9,7 @@ void Player::draw(SDL_Renderer* pRenderer) {
 }
 
 void Player::update() {
+	m_currentFrame = int((SDL_GetTicks() / 100)% 6);
 	m_x -= 1; // trying to override behavior of parent i.e. moving to the right by moving to the left
 }
 

@@ -4,6 +4,9 @@ set(SourceFiles
     main.cpp
     Game.cpp
     TextureManager.cpp
+    GameObject.cpp 
+    Player.cpp 
+    Enemy.cpp
 )
 
 find_package(PkgConfig REQUIRED)

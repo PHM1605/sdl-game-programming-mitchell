@@ -14,7 +14,8 @@ int main(int argc, char* args[]) {
             g_game->handleEvents();
             g_game->update();
             g_game->render();
-        }
+        	SDL_Delay(10);
+		}
     } else {
         std::cout << "game init failure - " << SDL_GetError() << "\n";
         return -1;
