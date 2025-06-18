@@ -8,8 +8,15 @@
 
 class Game {
 public:
-    Game();
-    ~Game();
+    static Game* Instance() {
+        if (s_pInstance == nullptr) {
+            s_pInstance = new Game();
+            return s_pInstance;
+        }
+        return s_pInstance;
+    }
+
+    SDL_Renderer* getRenderer() const { return m_pRenderer; }
 
     int m_gameWidth;
     int m_gameHeight;
@@ -23,12 +30,16 @@ public:
     }
     
 private:
+    // to make Game a Singleton
+    Game() {}
+    ~Game() {}
+    static Game* s_pInstance;
+
     SDL_Window* m_pWindow = 0;
     SDL_Renderer* m_pRenderer = 0;
     bool m_bRunning;
     int m_currentFrame;
     std::vector<GameObject*> m_gameObjects;
-    GameObject* m_go;
-    GameObject* m_player;
-    GameObject* m_enemy;
 };
+
+typedef Game TheGame;
