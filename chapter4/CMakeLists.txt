@@ -7,7 +7,8 @@ set(SourceFiles
     Player.cpp 
     Enemy.cpp
     SDLGameObject.cpp
-		Vector2D.cpp
+	Vector2D.cpp
+    InputHandler.cpp
 )
 
 find_package(PkgConfig REQUIRED)

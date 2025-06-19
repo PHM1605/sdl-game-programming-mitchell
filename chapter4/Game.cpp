@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "Enemy.h"
+#include "InputHandler.h"
 #include <iostream>
 
 // as Game is Singleton
@@ -47,6 +48,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		return false;
 	}
 
+	TheInputHandler::Instance()->initialiseJoysticks();
+
 	std::cout << "init success\n";
 	m_bRunning = true;
 
@@ -66,16 +69,7 @@ void Game::render() {
 }
 
 void Game::handleEvents() {
-	SDL_Event event;
-	if (SDL_PollEvent(&event)) {
-		switch (event.type) {
-		case SDL_QUIT:
-			m_bRunning = false;
-			break;
-		default:
-			break;
-		}
-	}
+	TheInputHandler::Instance()->update();
 }
 
 void Game::update() {
@@ -88,5 +82,6 @@ void Game::clean() {
 	std::cout << "cleaning game\n";
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
+	TheInputHandler::Instance()->clean();
 	SDL_Quit();
 }
