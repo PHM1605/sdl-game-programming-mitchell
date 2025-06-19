@@ -1,0 +1,1 @@
+./run.sh to show a mockup of running dialog (yeah!!!!)
