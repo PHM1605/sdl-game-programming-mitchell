@@ -48,6 +48,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		return false;
 	}
 
+	// Init Input (Joystick, ...)
 	TheInputHandler::Instance()->initialiseJoysticks();
 
 	std::cout << "init success\n";
