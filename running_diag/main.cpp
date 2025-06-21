@@ -2,6 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -35,6 +36,32 @@ void close() {
     SDL_Quit();
 }
 
+std::string wrapTextToFit(const std::string& text, int maxWidth) {
+    std::istringstream iss(text);
+    std::string word;
+    std::string line, wrapped;
+
+    while(iss >> word) {
+        std::string candidate = line.empty() ? word : line+" "+word;
+        // measure the size of text in pixels (w=#pixels)
+        int w = 0; 
+        TTF_SizeText(font, candidate.c_str(), &w, nullptr);
+        // if pixel-width is too big
+        if (w > maxWidth) {
+            if (!wrapped.empty()) wrapped += "\n";
+            wrapped += line; // 'wrapped' is the candidate minus the exceeding word
+            line = word; // 'line' is the exceeding word should be new-lined
+        } else 
+            line = candidate;
+    }
+
+    if (!line.empty()) {
+        if (!wrapped.empty()) wrapped += '\n';
+        wrapped += line;
+    }
+    return wrapped;
+}
+
 void renderDialogBox(const std::string& text, int charsToShow) {
     // 20 is the border (in pixels)
     SDL_Rect dialogRect = {20, SCREEN_HEIGHT-DIALOG_BOX_HEIGHT-20, SCREEN_WIDTH-40, DIALOG_BOX_HEIGHT};
@@ -43,24 +70,26 @@ void renderDialogBox(const std::string& text, int charsToShow) {
 
     SDL_Color textColor = {255, 255, 255}; // white chars
     std::string visibleText = text.substr(0, charsToShow);
-
-    SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped(font, visibleText.c_str(), textColor, dialogRect.w-10);
-    if (!textSurface) {
-        std::cerr << "TTF_RenderText_Blended_Wrapped failed: " << TTF_GetError() << "\n";
-        return;
+    // split the wrapped long text to individual sentences
+    std::istringstream lineStream(visibleText);
+    std::string line;
+    int lineHeight = TTF_FontHeight(font);
+    int y = dialogRect.y + 10; // y of the next line
+    while (std::getline(lineStream, line)) {
+        SDL_Surface* surface = TTF_RenderText_Blended(font, line.c_str(), textColor);
+        if (!surface) continue;
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if (!texture) {
+            SDL_FreeSurface(surface);
+            continue;
+        }
+        
+        SDL_Rect textRect = {dialogRect.x + 10, y, surface->w, surface->h};
+        SDL_RenderCopy(renderer, texture, nullptr, &textRect);
+        y += lineHeight;
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
     }
-    
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    if (!textTexture) {
-        std::cerr << "SDL_CreateTextureFromSurface failed: " << SDL_GetError() << "\n";
-        SDL_FreeSurface(textSurface);
-        return;
-    }
-    SDL_Rect textRect = {dialogRect.x+10, dialogRect.y+10, textSurface->w, textSurface->h};
-    SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
-
-    SDL_FreeSurface(textSurface);
-    SDL_DestroyTexture(textTexture);
 }
 
 int main(int argc, char* argv[]) {
@@ -69,6 +98,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     std::string fullText = "Hey there! Welcome to our world. It's full of wonders and adventures!";
+    std::string wrappedText = wrapTextToFit(fullText, SCREEN_WIDTH - 40 - 20);
     bool quit = false;
     SDL_Event e;
     Uint32 lastCharTime = SDL_GetTicks();
@@ -88,7 +118,7 @@ int main(int argc, char* argv[]) {
 
         SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255); // Clear screen (blueish)
         SDL_RenderClear(renderer);
-        renderDialogBox(fullText, charsShown);
+        renderDialogBox(wrappedText, charsShown);
         SDL_RenderPresent(renderer);
     }
     close();
