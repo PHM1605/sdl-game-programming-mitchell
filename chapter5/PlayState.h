@@ -1,4 +1,7 @@
 #include "GameState.h"
+#include <GameObject.h>
+#include <vector>
+
 
 class PlayState: public GameState {
 public:
@@ -12,4 +15,5 @@ public:
 
 private:
   static const std::string s_playID;
+  std::vector<GameObject*> m_gameObjects;
 };

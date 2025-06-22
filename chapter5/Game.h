@@ -36,6 +36,7 @@ public:
         return m_bRunning;
     }
     void quit() { m_bRunning = false; }
+    GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
     
 private:
     // to make Game a Singleton
