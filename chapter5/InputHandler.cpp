@@ -174,6 +174,12 @@ int InputHandler::yvalue(int joy, int stick) {
     return 0;
 }
 
+void InputHandler::reset() {
+    m_mouseButtonStates[LEFT] = false;
+    m_mouseButtonStates[RIGHT] = false;
+    m_mouseButtonStates[MIDDLE] = false;
+}
+
 void InputHandler::onJoystickButtonDown(SDL_Event& event) {
     // which Controller
     int whichOne = event.jbutton.which;

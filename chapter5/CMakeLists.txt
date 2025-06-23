@@ -13,6 +13,7 @@ set(SourceFiles
     PlayState.cpp 
     GameStateMachine.cpp
     MenuButton.cpp
+    PauseState.cpp
 )
 
 find_package(PkgConfig REQUIRED)
