@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include <GameObject.h>
+#include "SDLGameObject.h"
 #include <vector>
 
 
@@ -16,4 +17,5 @@ public:
 private:
   static const std::string s_playID;
   std::vector<GameObject*> m_gameObjects;
+  bool checkCollision(SDLGameObject* p1, SDLGameObject* p2);
 };

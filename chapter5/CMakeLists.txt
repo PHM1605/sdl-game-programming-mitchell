@@ -14,6 +14,8 @@ set(SourceFiles
     GameStateMachine.cpp
     MenuButton.cpp
     PauseState.cpp
+    AnimatedGraphic.cpp
+    GameOverState.cpp
 )
 
 find_package(PkgConfig REQUIRED)
