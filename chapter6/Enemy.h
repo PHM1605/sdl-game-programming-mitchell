@@ -10,8 +10,6 @@ public:
     void update();
     void clean();
     virtual void load(const LoaderParams* pParams);    
-private:
-    int m_numFrames;
 };
 
 class EnemyCreator: public BaseCreator {
