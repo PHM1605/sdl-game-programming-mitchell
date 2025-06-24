@@ -19,6 +19,7 @@ public:
   void setCallback(void (*callback)()) { m_callback = callback; }
   int getCallbackID() { return m_callbackID; }
 private:
+  // will be defined in onEnter() of the corresponding State (e.g. MainMenuState)
   void (*m_callback)();
   int m_callbackID; // will be set when parsing *.xml file 
   bool m_bReleased; 

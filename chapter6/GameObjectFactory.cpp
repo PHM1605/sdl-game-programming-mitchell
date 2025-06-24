@@ -1,3 +1,3 @@
 #include "GameObjectFactory.h"
 
-GameObjectFactory* GameObjectFactory::pInstance = nullptr;
+GameObjectFactory* GameObjectFactory::pInstance = 0;

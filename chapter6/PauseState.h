@@ -1,8 +1,8 @@
-#include "GameState.h"
+#include "MenuState.h"
 #include "GameObject.h"
 #include <vector>
 
-class PauseState: public GameState {
+class PauseState: public MenuState {
 public:
   virtual void update();
   virtual void render();
@@ -11,6 +11,7 @@ public:
   virtual std::string getStateID() const { return s_pauseID; }
 
 private:
+  virtual void setCallbacks(const std::vector<Callback>& callbacks);
   static void s_pauseToMain(); // when pressing the "Main Menu" button
   static void s_resumePlay(); // when pressing the "Resume" button
   static const std::string s_pauseID;

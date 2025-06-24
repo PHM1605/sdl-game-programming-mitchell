@@ -16,7 +16,12 @@ set(SourceFiles
     PauseState.cpp
     AnimatedGraphic.cpp
     GameOverState.cpp
-
+    tinystr.cpp 
+    tinyxml.cpp 
+    tinyxmlerror.cpp 
+    tinyxmlparser.cpp
+    StateParser.cpp
+    GameObjectFactory.cpp
 )
 
 find_package(PkgConfig REQUIRED)

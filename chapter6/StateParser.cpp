@@ -25,6 +25,9 @@ bool StateParser::parseState(const char* stateFile, std::string stateID, std::ve
     parseTextures(pTextureRoot, pTextureIDs);
     // pick the <OBJECTS> node
     TiXmlElement* pObjectRoot = 0;
+    for (TiXmlElement* e = pStateRoot->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) 
+        if (e->Value() == std::string("OBJECTS"))
+            pObjectRoot = e;
     parseObjects(pObjectRoot, pObjects);
     return true;
 }

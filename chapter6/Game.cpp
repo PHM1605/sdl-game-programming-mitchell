@@ -5,6 +5,7 @@
 #include "MainMenuState.h"
 #include "PlayState.h"
 #include "MenuButton.h"
+#include "AnimatedGraphic.h"
 #include <iostream>
 
 // as Game is Singleton
@@ -49,6 +50,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	
 	// Register Objects for the Game
 	TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+	TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
+	TheGameObjectFactory::Instance()->registerType("Enemy", new EnemyCreator());
+	TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MainMenuState());

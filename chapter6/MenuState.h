@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include "GameState.h"
+
 class MenuState: public GameState {
 protected:
     typedef void (*Callback)();
