@@ -4,6 +4,7 @@
 #include "MenuButton.h"
 #include "InputHandler.h"
 #include "StateParser.h"
+#include "TextureManager.h"
 
 const std::string PauseState::s_pauseID = "PAUSE";
 

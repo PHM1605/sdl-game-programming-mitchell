@@ -7,6 +7,8 @@
 #include "AnimatedGraphic.h"
 #include "MenuButton.h"
 #include "StateParser.h"
+#include "TextureManager.h"
+
 const std::string GameOverState::s_gameOverID = "GAMEOVER";
 
 void GameOverState::update() {

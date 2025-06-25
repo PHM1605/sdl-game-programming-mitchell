@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" source="tileset1.tsx"/>
  <tileset firstgid="199" source="tileset2.tsx"/>
  <layer id="1" name="Tile Layer 1" width="20" height="15">
-  <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,99,100,101,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,97,100,98,0,0,0,
-0,0,0,94,98,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,24,25,26,27,28,29,0,0,0,0,24,25,26,27,28,29,0,0,
-0,0,16,78,78,78,78,74,0,0,0,0,16,78,78,78,78,15,0,0,
-0,0,16,78,78,78,78,74,0,0,0,0,16,78,78,78,78,15,0,0,
-0,0,16,78,78,78,78,74,0,0,0,0,16,78,78,78,78,15,0,0,
-0,0,16,78,78,78,78,74,0,0,0,0,16,78,78,78,78,15,0,0
-</data>
+  <data encoding="base64" compression="zlib">
+   eJxjYKAvSAbiFCBOpbO9lIJEBoi7k/CoiSMgPwqGLpAAYkkglgJiaSCWAWJZCtQJALEfGvYiUh3/CDYPALskD/Y=
+  </data>
  </layer>
 </map>

@@ -23,9 +23,6 @@ public:
     }
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
-
-    int m_gameWidth;
-    int m_gameHeight;
     bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
     void render();
     void update();

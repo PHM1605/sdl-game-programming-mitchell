@@ -22,6 +22,7 @@ set(SourceFiles
     tinyxmlparser.cpp
     StateParser.cpp
     GameObjectFactory.cpp
+    base64.cpp
 )
 
 find_package(PkgConfig REQUIRED)
