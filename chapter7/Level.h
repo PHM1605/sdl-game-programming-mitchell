@@ -17,8 +17,7 @@ struct Tileset {
 
 class Level {
 public:
-    
-    ~Level() {}
+    ~Level();
     void update();
     void render();
     std::vector<Tileset>* getTilesets() {

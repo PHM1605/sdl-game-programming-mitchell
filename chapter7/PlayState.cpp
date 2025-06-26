@@ -6,7 +6,8 @@
 #include "Enemy.h"
 #include "GameOverState.h"
 #include "SDLGameObject.h"
-#include "StateParser.h"
+#include "LevelParser.h"
+#include "Level.h"
 #include <iostream>
 
 const std::string PlayState::s_playID = "PLAY";
@@ -16,24 +17,21 @@ void PlayState::update() {
   if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
     TheGame::Instance()->getStateMachine()->pushState(new PauseState());
   }
-  // update GameObjects in PlayState
-  for (int i=0; i<m_gameObjects.size(); i++) 
-    m_gameObjects[i]->update();
-
-  if (checkCollision(dynamic_cast<SDLGameObject*>(m_gameObjects[0]), dynamic_cast<SDLGameObject*>(m_gameObjects[1])))
-    TheGame::Instance()->getStateMachine()->pushState(new GameOverState());
+  if (pLevel != NULL)
+    pLevel->update();
 }
 
-void PlayState:: render() {
-  for (int i=0; i<m_gameObjects.size(); i++) {
-    m_gameObjects[i]->draw();
-  }
+void PlayState::render() {
+  pLevel->render();
 }
 
 bool PlayState::onEnter() {
-  // parse the State
-  StateParser stateParser;
-  stateParser.parseState("test.xml", s_playID, &m_gameObjects, &m_textureIDList);
+  // parse the Level
+  LevelParser levelParser;
+  pLevel = levelParser.parseLevel("assets/map1.tmx");
+  if (!pLevel) std::cout << "ERROR\n";
+  else std::cout << "OK\n";
+
   std::cout << "entering PlayState\n";
   return true;
 }

@@ -21,8 +21,11 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source
 distribution.
 */
-
+#pragma once 
+#ifndef TIXML
 #define TIXML_USE_STL
+#endif
+
 #ifndef TINYXML_INCLUDED
 
 #ifdef _MSC_VER

@@ -49,3 +49,24 @@ void TextureManager::clearTextureMap() {
 void TextureManager::clearFromTextureMap(std::string id) {
     m_textureMap.erase(id);
 }
+
+// id: Tileset name ("blocks1"), defining in map1.tmx file, being parsed in LevelParser
+// x, y: destination to draw to (on the Game screen, in pixels)
+// width, height: 32 pixels
+void TextureManager::drawTile(
+    std::string id, 
+    int margin, int spacing,
+    int x, int y, int width, int height,
+    int currentRow, int currentFrame,
+    SDL_Renderer* pRenderer
+) {
+    SDL_Rect srcRect;
+    SDL_Rect destRect;
+    srcRect.x = margin + (spacing+width)*currentFrame;
+    srcRect.y = margin + (spacing+height)*currentRow;
+    srcRect.w = destRect.w = width;
+    srcRect.h = destRect.h = height;
+    destRect.x = x;
+    destRect.y = y;
+    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+}

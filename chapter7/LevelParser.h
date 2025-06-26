@@ -1,5 +1,6 @@
 #pragma once 
 #include "Level.h"
+#include "tinyxml.h"
 
 class LevelParser {
 public:
