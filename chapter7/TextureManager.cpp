@@ -69,7 +69,5 @@ void TextureManager::drawTile(
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    destRect.x=0;
-    destRect.y = 0;
     SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
 }
