@@ -5,9 +5,10 @@
 #include "TileLayer.h"
 #include "base64.h"
 #include "zlib.h"
+#include <string>
 
 Level* LevelParser::parseLevel(const char* levelFile) {
-    TiXmlDocument levelDocument;
+    TiXmlDocument levelDocument;    
     levelDocument.LoadFile(levelFile);
     Level* pLevel = new Level();
     // get <map version="1.0" orientation="orthogonal" width="60" height="15" tilewidth="32" tileheight="32">
@@ -16,9 +17,11 @@ Level* LevelParser::parseLevel(const char* levelFile) {
     pRoot->Attribute("width", &m_width);
     pRoot->Attribute("height", &m_height);
     // get many <tileset firstgid="1" source="tileset1.tsx"/> 
-    for (TiXmlElement* e=pRoot->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) {
-        if (e->Value() == std::string("tileset"))
+    for(TiXmlElement* e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement())
+    {
+        if (e->Value() == std::string("tileset")) {
             parseTilesets(e, pLevel->getTilesets());
+        }
     }
     // get many <layer id="1" name="Tile Layer 1" width="20" height="15">
     for (TiXmlElement* e=pRoot->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) {

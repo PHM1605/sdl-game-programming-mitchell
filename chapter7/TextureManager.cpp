@@ -4,6 +4,7 @@
 TextureManager* TextureManager::s_pInstance = nullptr;
 
 bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer) {
+    std::cout <<fileName << "AC" << std::endl;
     SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
     if (pTempSurface == nullptr) return false;
     SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
@@ -68,5 +69,7 @@ void TextureManager::drawTile(
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
+    destRect.x=0;
+    destRect.y = 0;
     SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
 }

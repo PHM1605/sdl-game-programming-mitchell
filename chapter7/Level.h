@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "Layer.h"
+#include <iostream>
 
 struct Tileset {
     int firstGridID; // firstGridID=199 means 1st cell in Tileset has number=199, 2nd cell=200,....
@@ -17,6 +18,7 @@ struct Tileset {
 
 class Level {
 public:
+    Level();
     ~Level();
     void update();
     void render();
@@ -28,8 +30,8 @@ public:
     }
 private:
     // NOTE: we make Level's constructor private to ensure it must be created by its 'friend' class
-    Level();
     friend class LevelParser;
+        
     std::vector<Tileset> m_tilesets;
     std::vector<Layer*> m_layers;
 };

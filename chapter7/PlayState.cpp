@@ -12,6 +12,16 @@
 
 const std::string PlayState::s_playID = "PLAY";
 
+bool PlayState::onEnter() {
+  // parse the Level
+  LevelParser levelParser;
+  pLevel = levelParser.parseLevel("assets/map1.tmx");
+
+  std::cout << "entering PlayState\n";
+  return true;
+}
+
+
 void PlayState::update() {
   // Pause when press Escape
   if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
@@ -25,16 +35,7 @@ void PlayState::render() {
   pLevel->render();
 }
 
-bool PlayState::onEnter() {
-  // parse the Level
-  LevelParser levelParser;
-  pLevel = levelParser.parseLevel("assets/map1.tmx");
-  if (!pLevel) std::cout << "ERROR\n";
-  else std::cout << "OK\n";
 
-  std::cout << "entering PlayState\n";
-  return true;
-}
 
 bool PlayState::onExit() {
   for (int i=0; i<m_gameObjects.size(); i++)

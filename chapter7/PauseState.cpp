@@ -28,7 +28,7 @@ void PauseState::render() {
 
 bool PauseState::onEnter() {
   StateParser stateParser;
-  stateParser.parseState("test.xml", s_pauseID, &m_gameObjects, &m_textureIDList);
+  stateParser.parseState("assets/attack.xml", s_pauseID, &m_gameObjects, &m_textureIDList);
   // set the callbacks; then assign them to the corresponding Buttons
   m_callbacks.push_back(0);
   m_callbacks.push_back(s_pauseToMain);

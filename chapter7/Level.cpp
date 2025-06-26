@@ -1,6 +1,7 @@
 #include "Level.h"
 
-Level::Level() {}
+Level::Level() {
+}
 
 Level::~Level() {
     for (int i=0; i<m_layers.size(); i++){
