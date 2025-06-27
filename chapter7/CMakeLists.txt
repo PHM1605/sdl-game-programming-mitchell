@@ -14,6 +14,7 @@ set(SourceFiles
     main.cpp
     MainMenuState.cpp 
     MenuButton.cpp
+    ObjectLayer.cpp
     PauseState.cpp
     Player.cpp 
     PlayState.cpp

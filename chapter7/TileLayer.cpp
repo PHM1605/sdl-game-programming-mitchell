@@ -12,6 +12,7 @@ TileLayer::TileLayer(int tileSize, const std::vector<Tileset>& tilesets):
 // during scrolling 
 void TileLayer::update() {
     m_position += m_velocity;
+    m_velocity.setX(1);
 }
 
 void TileLayer::render() {
@@ -25,7 +26,7 @@ void TileLayer::render() {
     y2 = int(m_position.getY()) % m_tileSize;
     // loop over the Game screen cells
     for (int i=0; i<m_numRows; i++) {
-        for (int j=0; j<m_numColumns; j++) {
+        for (int j=0; j<m_numColumns+1; j++) {
             int id = m_tileIDs[i+y][j+x];
             if (id==0) continue; // if Tile value (id) = 0 at that position->nothing to render
             Tileset tileset = getTilesetByID(id);

@@ -30,7 +30,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			// renderer init success
 			if (m_pRenderer != 0) {
 				std::cout << "renderer creation success\n";
-				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255); // color black
+				SDL_SetRenderDrawColor(m_pRenderer, 41, 118, 187, 255); // color black
 			} else {
 				std::cout << "renderer init fail\n";
 				return false;

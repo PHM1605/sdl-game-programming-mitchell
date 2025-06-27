@@ -5,6 +5,7 @@
 #include "TileLayer.h"
 #include "base64.h"
 #include "zlib.h"
+#include "ObjectLayer.h"
 #include <string>
 
 Level* LevelParser::parseLevel(const char* levelFile) {
@@ -16,6 +17,15 @@ Level* LevelParser::parseLevel(const char* levelFile) {
     pRoot->Attribute("tilewidth", &m_tileSize);
     pRoot->Attribute("width", &m_width);
     pRoot->Attribute("height", &m_height);
+    // we know <properties> is the 1st property
+    TiXmlElement* pProperties = pRoot->FirstChildElement();
+    // get many <property name="helicopter" value="assets/helicopter.png"/>
+    for (TiXmlElement* e = pProperties->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) {
+        std::string tmp;
+        tmp = e->Attribute("value");
+        std::cout <<  tmp << std::endl;
+        parseTextures(e);
+    }    
     // get many <tileset firstgid="1" source="tileset1.tsx"/> 
     for(TiXmlElement* e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement())
     {
@@ -24,10 +34,16 @@ Level* LevelParser::parseLevel(const char* levelFile) {
         }
     }
     // get many <layer id="1" name="Tile Layer 1" width="20" height="15">
+    // OR get many <objectgroup id="6" name="Object Layer 1">
     for (TiXmlElement* e=pRoot->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) {
-        if (e->Value() == std::string("layer"))
-            parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets());
-    }
+        if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
+            if (e->FirstChildElement()->Value() == std::string("object")) {
+                parseObjectLayer(e, pLevel->getLayers());
+            } else if (e->FirstChildElement()->Value() == std::string("data")) {
+                parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets());
+            }
+        }            
+    }    
     return pLevel;
 }
 
@@ -87,4 +103,65 @@ void LevelParser::parseTileLayer(TiXmlElement* pTileElement, std::vector<Layer*>
     TileLayer* pTileLayer = new TileLayer(m_tileSize, *pTilesets);
     pTileLayer->setTileIDs(data);
     pLayers->push_back(pTileLayer);
+}
+
+// <property name="helicopter" value="helicopter.png"/>
+void LevelParser::parseTextures(TiXmlElement* pTextureRoot) {
+    bool tmp = TheTextureManager::Instance()->load(pTextureRoot->Attribute("value"), pTextureRoot->Attribute("name"), TheGame::Instance()->getRenderer());
+}
+// pObjectElement: <objectgroup id="6" name="Object Layer 1">
+void LevelParser::parseObjectLayer(TiXmlElement* pObjectElement, std::vector<Layer*>* pLayers) {
+    ObjectLayer* pObjectLayer = new ObjectLayer();
+    
+    for (TiXmlElement* e = pObjectElement->FirstChildElement(); e != NULL; e = pObjectElement->NextSiblingElement()) {
+        // <object id="50" name="Helicopter1" type="Player" x="509.091" y="160.606">
+        std::cout << e->Value() << std::endl; // "object"
+        if (e->Value() == std::string("object")) {
+            // numFrames: how many frames that GameObject's animation has
+            // width, height: of 1 frame of animation of helicopter's .png
+            int numFrames, width, height;
+            int callbackID = 0, animSpeed = 0;
+            // x, y: position of GameObject on the whole Map
+            double x, y;
+            // string that maps name & a Texture file
+            std::string textureID;
+            e->Attribute("x", &x);
+            e->Attribute("y", &y);
+            GameObject* pGameObject = TheGameObjectFactory::Instance()->create(
+                e->Attribute("type") // "Player"
+            );
+            
+            // properties: <properties>
+            for (TiXmlElement* properties=e->FirstChildElement(); properties!=NULL; properties=properties->NextSiblingElement()) {
+                if (properties->Value() == std::string("properties")) {
+                    // property: <property name="numFrames" value="4"/>
+                    for (TiXmlElement* property=properties->FirstChildElement(); property!=NULL; property=property->NextSiblingElement()) {
+                        if (property->Value() == std::string("property")) {
+                            // <property name="numFrames" value="4"/>
+                            if (property->Attribute("name") == std::string("numFrames"))
+                                property->Attribute("value", &numFrames);
+                            // <property name="textureHeight" value="55"/>
+                            else if (property->Attribute("name") == std::string("textureHeight")) 
+                                property->Attribute("value", &height);
+                            // <property name="textureWidth" value="128"/>
+                            else if (property->Attribute("name") == std::string("textureWidth"))
+                                property->Attribute("value", &width);
+                            // <property name="textureID" value="helicopter"/>
+                            else if (property->Attribute("name") == std::string("textureID")){
+                                textureID = property->Attribute("value");
+                            }
+                                
+                            else if (property->Attribute("name") == std::string("callbackID"))
+                                property->Attribute("value", &callbackID);
+                            else if (property->Attribute("name") == std::string("animSpeed"))
+                                property->Attribute("value", &animSpeed);
+                        }
+                    }
+                }
+            }
+            pGameObject->load(new LoaderParams((int)x, (int)y, width, height, textureID, numFrames, callbackID, animSpeed));
+            pObjectLayer->getGameObjects()->push_back(pGameObject);
+        }
+    }
+    pLayers->push_back(pObjectLayer);
 }
