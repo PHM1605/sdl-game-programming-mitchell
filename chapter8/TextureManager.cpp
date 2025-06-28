@@ -28,7 +28,14 @@ void TextureManager::draw(std::string id, int x, int y, int width, int height, S
     SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
 } 
 
-void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip) {
+// x, y: destination Game screen x/y
+void TextureManager::drawFrame(
+    std::string id, int x, int y, int width, int height, 
+    int currentRow, int currentFrame, 
+    SDL_Renderer* pRenderer, 
+    double angle, int alpha,
+    SDL_RendererFlip flip
+) {
     SDL_Rect srcRect;
     SDL_Rect destRect;
     srcRect.x = width * currentFrame; 
@@ -37,7 +44,8 @@ void TextureManager::drawFrame(std::string id, int x, int y, int width, int heig
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+    SDL_SetTextureAlphaMod(m_textureMap[id], alpha);
+    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip);
 }
 
 // erase the whole TextureMap
