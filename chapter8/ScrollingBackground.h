@@ -7,6 +7,10 @@ class ScrollingBackground: public ShooterObject {
 public:
   virtual ~ScrollingBackground() {}
   ScrollingBackground();
+  virtual void draw();
+  virtual void update();
+  virtual void clean();
+  virtual void load(std::unique_ptr<LoaderParams> const &pParams);
 
 private:
   int m_scrollSpeed;
