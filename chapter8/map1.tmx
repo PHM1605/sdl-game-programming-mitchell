@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="150" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="51">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="150" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="51">
  <properties>
   <property name="boss" value="assets/boss1.png"/>
   <property name="bossexplosion" value="assets/bossexplosion.png"/>
@@ -21,12 +21,20 @@
  <tileset firstgid="199" name="blocks2" tilewidth="32" tileheight="32" spacing="2" margin="2" tilecount="198" columns="18">
   <image source="build/assets/blocks2.png" width="614" height="376"/>
  </tileset>
- <layer id="4" name="Tile Layer 2" width="150" height="15">
+ <layer id="4" name="Tile Layer 2" width="150" height="15" visible="0">
   <data encoding="base64" compression="zlib">
    eJztlFsKAjEMRVt0DY6vBai4ETehgrpudQnqBozgj0gg1OTekfbA+ZmZJrdpmZQaGgfxKJ7YQSqCPXN2/xpoMy5nK+7EPTlHTbBnzu5vhZ3zl/8KO3sp7Nzs/jXQZvy/tLNr9JU+3M2zeBGvoHWIulHZomsz+3n3uYl38QFah6gblS26NrOfd59BTmmYcesQdaOyRddm9vPo0+VPR/n7mUXLOmsGjzzeNUprl54DYy9e5zkWJ+JUnIlzRa9vNJAZ0O+sIGcQfZ4bcSF2b5eKXt9oIDOg31lBziD6PF/3ag1UA5kBrRV2Ts+9ve7VCqgGMgNaK+ycHnt7Ak/5jww=
   </data>
  </layer>
- <objectgroup id="6" name="Object Layer 1">
+ <layer id="7" name="Collision" width="150" height="15">
+  <properties>
+   <property name="collidable" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0jENAAAIBDH8m8UCKwKehKFNzsFVAQAAAPzUK0jxFRd8xQVfAQBA3gAsEQs1
+  </data>
+ </layer>
+ <objectgroup id="6" name="Object Layer 1" visible="0">
   <object id="50" name="Helicopter1" type="Player" x="509.091" y="160.606">
    <properties>
     <property name="numFrames" value="4"/>

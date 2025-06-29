@@ -1,8 +1,12 @@
 #pragma once 
 #include <string>
 #include <vector>
-#include "Layer.h"
 #include <iostream>
+#include "Layer.h"
+#include "LevelParser.h"
+#include "Player.h"
+#include "TileLayer.h"
+// #include "CollisionManager.h"
 
 struct Tileset {
     int firstGridID; // firstGridID=199 means 1st cell in Tileset has number=199, 2nd cell=200,....
@@ -18,7 +22,6 @@ struct Tileset {
 
 class Level {
 public:
-    Level();
     ~Level();
     void update();
     void render();
@@ -28,10 +31,19 @@ public:
     std::vector<Layer*>* getLayers() {
         return &m_layers;
     }
+    std::vector<TileLayer*>* getCollisionLayers() { return &m_collisionLayers; }
+    std::vector<TileLayer*>& getCollidableLayers() { return m_collisionLayers; }
+
+    Player* getPlayer() { return m_pPlayer; }
+    void setPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 private:
     // NOTE: we make Level's constructor private to ensure it must be created by its 'friend' class
     friend class LevelParser;
-        
+    Level();
+    
+    Player* m_pPlayer;
+
     std::vector<Tileset> m_tilesets;
     std::vector<Layer*> m_layers;
+    std::vector<TileLayer*> m_collisionLayers;
 };
