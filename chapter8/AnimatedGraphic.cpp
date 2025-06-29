@@ -1,19 +1,19 @@
 #include <SDL2/SDL.h>
 #include "AnimatedGraphic.h"
 
-AnimatedGraphic::AnimatedGraphic(): SDLGameObject() {}
+AnimatedGraphic::AnimatedGraphic(): ShooterObject() {}
 
 void AnimatedGraphic::update() {
   m_currentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_numFrames));
 }
 
 void AnimatedGraphic::draw() {
-  SDLGameObject::draw();
+  ShooterObject::draw();
 }
 
 void AnimatedGraphic::clean() {}
 
-void AnimatedGraphic::load(const LoaderParams* pParams) {
-  SDLGameObject::load(pParams);
+void AnimatedGraphic::load(std::unique_ptr<LoaderParams> const &pParams) {
+  ShooterObject::load(pParams);
   m_animSpeed = pParams->getAnimSpeed();
 }

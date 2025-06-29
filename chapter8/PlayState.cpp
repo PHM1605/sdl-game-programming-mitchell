@@ -1,11 +1,8 @@
 #include "PlayState.h"
-#include "TextureManager.h"
+#include "GameOverState.h"
+#include "PauseState.h"
 #include "Game.h"
 #include "InputHandler.h"
-#include "PauseState.h"
-#include "Enemy.h"
-#include "GameOverState.h"
-#include "SDLGameObject.h"
 #include "LevelParser.h"
 #include "Level.h"
 #include <iostream>
