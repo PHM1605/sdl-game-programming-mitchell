@@ -10,9 +10,13 @@ TileLayer::TileLayer(int tileSize, const std::vector<Tileset>& tilesets):
 }
 
 // during scrolling 
-void TileLayer::update() {
-    m_position += m_velocity;
-    m_velocity.setX(1);
+void TileLayer::update(Level* pLevel) {
+    if (m_position.getX() < m_tileSize * m_mapWidth - TheGame::Instance()->getGameWidth() - m_tileSize) {
+        m_velocity.setX(TheGame::Instance()->getScrollSpeed());
+        m_position += m_velocity;
+    } else {
+        m_velocity.setX(0);
+    }
 }
 
 void TileLayer::render() {

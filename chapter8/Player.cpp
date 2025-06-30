@@ -1,17 +1,36 @@
 #include "Player.h"
 #include "InputHandler.h"
 #include "Game.h"
+#include "SoundManager.h"
+#include "BulletHandler.h"
 
-Player::Player(): ShooterObject():
-	m_invulnerable(false), m_invulnerableTime(200), m_invulnerableCounter(0)
+Player::Player(): 
+	ShooterObject(), m_invulnerable(false), m_invulnerableTime(200), m_invulnerableCounter(0)
 {}
 
-void Player::load(const LoaderParams* pParams) {
-	SDLGameObject::load(pParams);
+void Player::collision() {
+	// if Player is not invulnerable then set to dying and change values for death animation tile sheet
+	if (!m_invulnerable && !TheGame::Instance()->getLevelComplete()) {
+		m_textureID = "largeexplosion";
+		m_currentFrame = 0;
+		m_numFrames = 9;
+		m_width = 60;
+		m_height = 60;
+		m_bDying = true;
+	}
+}
+
+void Player::load(std::unique_ptr<LoaderParams> const &pParams) {
+	ShooterObject::load(std::move(pParams)); // pParams now belongs to ShooterObject (we won't use pParams later)
+	// Setup Player's inherited values (from ShooterObject) here
+	m_bulletFiringSpeed = 13;
+	m_moveSpeed = 3;
+	m_bulletCounter = m_bulletFiringSpeed; 
+	m_dyingTime = 100; // time it takes for death explosion
 }
 
 void Player::draw() {
-	SDLGameObject::draw();
+	ShooterObject::draw();
 }
 
 void Player::handleAnimation() {
@@ -75,8 +94,6 @@ void Player::update() {
 	}
 }
 
-void Player::clean() {}
-
 void Player::ressurect() {
 	TheGame::Instance()->setPlayerLives(TheGame::Instance()->getPlayerLives()-1);
 	m_position.setX(10);
@@ -91,9 +108,34 @@ void Player::ressurect() {
 	m_invulnerable = true;
 }
 
+void Player::clean() {
+	ShooterObject::clean();
+}
+
 void Player::handleInput() {	
-	Vector2D* target = TheInputHandler::Instance()->getMousePosition();
-	m_velocity = *target - m_position;
-	m_velocity /= 50;
+	if (!m_bDead) {
+		if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_UP) && m_position.getY() > 0)
+			m_velocity.setY(-m_moveSpeed);
+		else if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_DOWN) && (m_position.getY()+m_height) < TheGame::Instance()->getGameHeight()-10)
+			m_velocity.setY(m_moveSpeed);
+		
+		if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_LEFT) && m_position.getX() > 0)
+			m_velocity.setX(-m_moveSpeed);
+		else if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT) && (m_position.getX()+m_width) < TheGame::Instance()->getGameWidth())
+			m_velocity.setX(m_moveSpeed);
+		
+		if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE)) {
+			if (m_bulletCounter = m_bulletFiringSpeed) {
+				TheSoundManager::Instance()->playSound("shoot", 0);
+				TheBulletHandler::Instance()->addPlayerBullet(
+					m_position.getX()+90, m_position.getY()+12, 11, 11, "bullet1", 1, Vector2D(10,0)
+				);
+				m_bulletCounter = 0;
+			}
+			m_bulletCounter++;
+		} else {
+			m_bulletCounter = m_bulletFiringSpeed;
+		}
+	}
 }
 

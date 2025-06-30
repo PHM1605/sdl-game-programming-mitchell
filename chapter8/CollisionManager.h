@@ -1,4 +1,7 @@
 #pragma once 
+#include "Player.h"
+#include "GameObject.h"
+#include "TileLayer.h"
 
 class CollisionManager {
 public:

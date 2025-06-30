@@ -1,6 +1,6 @@
 #pragma once 
 #include <SDL2/SDL.h>
-#include "SDLGameObject.h"
+#include "ShooterObject.h"
 #include "GameObjectFactory.h"
 
 enum button_state {
@@ -9,13 +9,13 @@ enum button_state {
   CLICKED = 2
 };
 
-class MenuButton: public SDLGameObject {
+class MenuButton: public ShooterObject {
 public:
   MenuButton();
   virtual void draw();
   virtual void update();
   virtual void clean();
-  virtual void load(const LoaderParams* pParams);
+  virtual void load(std::unique_ptr<LoaderParams> const &pParams);
   void setCallback(void (*callback)()) { m_callback = callback; }
   int getCallbackID() { return m_callbackID; }
 private:

@@ -3,10 +3,10 @@
 #include <vector>
 #include <iostream>
 #include "Layer.h"
-#include "LevelParser.h"
 #include "Player.h"
-#include "TileLayer.h"
 // #include "CollisionManager.h"
+
+class TileLayer;
 
 struct Tileset {
     int firstGridID; // firstGridID=199 means 1st cell in Tileset has number=199, 2nd cell=200,....

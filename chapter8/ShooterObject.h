@@ -19,7 +19,7 @@ protected:
   ShooterObject();
   // draw the animation for the object being destroyed
   void doDyingAnimation();
-  // how fast will this object fire bullets? with a counter
+  // only in "fully charged" state we can fire a Bullet i.e. m_bulletFiringSpeed == m_bulletCounter
   int m_bulletFiringSpeed;
   int m_bulletCounter;
   // how fast will this object move?

@@ -3,6 +3,8 @@ project(sdl-game-programming-mitchell)
 set(SourceFiles 
     AnimatedGraphic.cpp
     base64.cpp
+    BulletHandler.cpp
+    CollisionManager.cpp
     Game.cpp
     GameObjectFactory.cpp
     GameOverState.cpp
@@ -17,6 +19,8 @@ set(SourceFiles
     PauseState.cpp
     Player.cpp 
     PlayState.cpp
+    ShooterObject.cpp
+    SoundManager.cpp
     StateParser.cpp
     TextureManager.cpp
     TileLayer.cpp

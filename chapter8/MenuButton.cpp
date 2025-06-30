@@ -1,13 +1,17 @@
 #include "MenuButton.h"
 #include "InputHandler.h"
 
-MenuButton::MenuButton(): SDLGameObject()
-{
+MenuButton::MenuButton(): ShooterObject(), m_callback(0), m_bReleased(true)
+{}
+
+void MenuButton::load(std::unique_ptr<LoaderParams> const &pParams) {
+  ShooterObject::load(pParams);
+  m_callbackID = pParams->getCallbackID();
   m_currentFrame = MOUSE_OUT;
 }
 
 void MenuButton::draw() {
-  SDLGameObject::draw();
+  ShooterObject::draw();
 }
 
 void MenuButton::update() {
@@ -17,7 +21,7 @@ void MenuButton::update() {
     // when left-clicking for the first time (not when keep-constant-clicking)
     if (TheInputHandler::Instance()->getMouseButtonState(LEFT) && m_bReleased) {
       m_currentFrame = CLICKED; // frame 2 of Button .png
-      m_callback(); // call callback function when click
+      if (m_callback != 0) m_callback(); // call callback function when click
       m_bReleased = false;
     }
     // when mouse-over but not left-clicking 
@@ -32,11 +36,5 @@ void MenuButton::update() {
 }
 
 void MenuButton::clean() {
-  SDLGameObject::clean();
-}
-
-void MenuButton::load(const LoaderParams* pParams) {
-  SDLGameObject::load(pParams);
-  m_callbackID = pParams->getCallbackID();
-  m_currentFrame = MOUSE_OUT;
+  ShooterObject::clean();
 }

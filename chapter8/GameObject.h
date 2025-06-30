@@ -13,6 +13,7 @@ public:
 	virtual void collision() = 0; // handle collision
 	virtual std::string type() = 0; // get object type
 	Vector2D& getPosition() { return m_position; }
+	Vector2D& getVelocity() { return m_velocity; }
 	int getWidth() { return m_width; }
 	int getHeight() { return m_height; }
 	// object moves backward means screen moves forward

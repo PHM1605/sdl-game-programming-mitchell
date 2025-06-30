@@ -1,5 +1,7 @@
 #include "SoundManager.h"
 
+SoundManager* SoundManager::s_pInstance;
+
 // frequency, sound-format, num-channels, chunk-size
 SoundManager::SoundManager() {
   Mix_OpenAudio(22050, AUDIO_S16, 2, (4096/2));
