@@ -16,7 +16,7 @@ public:
             pInstance = new GameObjectFactory();
         return pInstance;
     }
-    // register a Creator
+    // register a Creator of typeID (e.g. GliderCreator)
     bool registerType(std::string typeID, BaseCreator* pCreator) {
         std::map<std::string, BaseCreator*>::iterator it = m_creators.find(typeID);
         // if type already registered, delete the passed-in pointer, do nothing else
@@ -29,7 +29,7 @@ public:
         return true;
     }
 
-    // ask a Creator of 'typeID' creating a GameObject 
+    // ask a Creator of 'typeID' (e.g. typeID="Glider") creating a GameObject 
     GameObject* create(std::string typeID) {
         std::map<std::string, BaseCreator*>::iterator it = m_creators.find(typeID);
         if (it == m_creators.end()) {

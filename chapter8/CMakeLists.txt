@@ -19,6 +19,7 @@ set(SourceFiles
     PauseState.cpp
     Player.cpp 
     PlayState.cpp
+    ScrollingBackground.cpp
     ShooterObject.cpp
     SoundManager.cpp
     StateParser.cpp

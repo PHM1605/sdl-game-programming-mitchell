@@ -21,5 +21,5 @@ static bool RectRect(SDL_Rect* A, SDL_Rect* B) {
   // if left of A is more than right of B = no collision
   if (A->x+aWBuf >= B->x+B->w-bWBuf) { return false; }
   
-  return false;
+  return true;
 }

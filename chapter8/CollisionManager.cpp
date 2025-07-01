@@ -37,6 +37,7 @@ void CollisionManager::checkEnemyPlayerBulletCollision(const std::vector<GameObj
             // if the object is not "Enemy" OR object is off-screen
             if (pObject->type() != std::string("Enemy") || !pObject->updating())
                 continue;
+            
             // Create collision-box of each Enemy-object
             SDL_Rect* pRect1 = new SDL_Rect();
             pRect1->x = pObject->getPosition().getX();

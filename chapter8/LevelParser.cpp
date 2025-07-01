@@ -13,6 +13,7 @@ Level* LevelParser::parseLevel(const char* levelFile) {
     levelDocument.LoadFile(levelFile);
     Level* pLevel = new Level();
     // pRoot: <map version="1.0" orientation="orthogonal" width="60" height="15" tilewidth="32" tileheight="32">
+    // width, height: of entire TileMap, in terms of cells
     TiXmlElement* pRoot = levelDocument.RootElement();
     pRoot->Attribute("tilewidth", &m_tileSize);
     pRoot->Attribute("width", &m_width);
@@ -21,10 +22,8 @@ Level* LevelParser::parseLevel(const char* levelFile) {
     TiXmlElement* pProperties = pRoot->FirstChildElement();
     // get many <property name="helicopter" value="assets/helicopter.png"/>
     for (TiXmlElement* e = pProperties->FirstChildElement(); e!=NULL; e=e->NextSiblingElement()) {
-        std::string tmp;
-        tmp = e->Attribute("value");
-        std::cout <<  tmp << std::endl;
-        parseTextures(e);
+        if (e->Value() == std::string("property"))
+            parseTextures(e);
     }    
     // get many <tileset firstgid="1" source="tileset1.tsx"/> 
     for(TiXmlElement* e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement())
@@ -64,11 +63,11 @@ Level* LevelParser::parseLevel(const char* levelFile) {
             if (e->FirstChildElement()->Value() == std::string("object")) {
                 parseObjectLayer(e, pLevel->getLayers(), pLevel);
             }  
-            // <layer> with <data> only (Option 2) OR <layer> with Collidable <properties> 
-            else if (e->FirstChildElement()->Value() == std::string("data") || 
-                (e->FirstChildElement()->NextSiblingElement()!=0 && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data")) ) {
-                parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets(), pLevel->getCollisionLayers());
-            }
+            // // <layer> with <data> only (Option 2) OR <layer> with Collidable <properties> 
+            // else if (e->FirstChildElement()->Value() == std::string("data") || 
+            //     (e->FirstChildElement()->NextSiblingElement()!=0 && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data")) ) {
+            //     parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets(), pLevel->getCollisionLayers());
+            // }
         }            
     }    
     return pLevel;
@@ -155,9 +154,8 @@ void LevelParser::parseTextures(TiXmlElement* pTextureRoot) {
 void LevelParser::parseObjectLayer(TiXmlElement* pObjectElement, std::vector<Layer*>* pLayers, Level* pLevel) {
     ObjectLayer* pObjectLayer = new ObjectLayer();
     
-    for (TiXmlElement* e = pObjectElement->FirstChildElement(); e != NULL; e = pObjectElement->NextSiblingElement()) {
-        // <object id="50" name="Helicopter1" type="Player" x="509.091" y="160.606">
-        std::cout << e->Value() << std::endl; // "object"
+    for (TiXmlElement* e = pObjectElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+        // e: <object name="Glider1" type="Glider" x="1505" y="149" width="32" height="32">
         if (e->Value() == std::string("object")) {
             // numFrames: how many frames that GameObject's animation has
             // width, height: of 1 frame of animation of helicopter's .png
@@ -171,7 +169,7 @@ void LevelParser::parseObjectLayer(TiXmlElement* pObjectElement, std::vector<Lay
             e->Attribute("x", &x);
             e->Attribute("y", &y);
             type = e->Attribute("type");
-            GameObject* pGameObject = TheGameObjectFactory::Instance()->create(type); // "Player"
+            GameObject* pGameObject = TheGameObjectFactory::Instance()->create(type); // "Player"/"Glider"
             
             // properties: <properties>
             for (TiXmlElement* properties=e->FirstChildElement(); properties!=NULL; properties=properties->NextSiblingElement()) {

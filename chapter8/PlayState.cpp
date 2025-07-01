@@ -11,6 +11,28 @@
 
 const std::string PlayState::s_playID = "PLAY";
 
+bool PlayState::onEnter() {
+  TheGame::Instance()->setPlayerLives(3);
+  // parse the Level
+  LevelParser levelParser;
+  pLevel = levelParser.parseLevel(TheGame::Instance()->getLevelFiles()[TheGame::Instance()->getCurrentLevel()-1].c_str());
+  bool tmp;
+  TheTextureManager::Instance()->load("assets/bullet1.png", "bullet1", TheGame::Instance()->getRenderer());
+  TheTextureManager::Instance()->load("assets/bullet2.png", "bullet2", TheGame::Instance()->getRenderer());
+  TheTextureManager::Instance()->load("assets/bullet3.png", "bullet3", TheGame::Instance()->getRenderer());
+  bool ok = TheTextureManager::Instance()->load("assets/lives.png", "lives", TheGame::Instance()->getRenderer());
+  if (!ok) {
+    std::cerr << "Failed to load lives.png\n";
+  } else {
+    std::cout << "LOADING LIVES OK \n";
+  }
+
+  if (pLevel != 0) 
+    m_loadingComplete = true;
+  std::cout << "entering PlayState\n";
+  return true;
+}
+
 void PlayState::update() {
   if (m_loadingComplete && !m_exiting) {
     // Pause when press Escape
@@ -31,27 +53,11 @@ void PlayState::render() {
   if (m_loadingComplete) {
     if (pLevel != 0) pLevel->render();
     for (int i=0; i<TheGame::Instance()->getPlayerLives(); i++)
+    {
       TheTextureManager::Instance()->drawFrame("lives", i*30, 0, 32, 30, 0, 0, TheGame::Instance()->getRenderer(), 0.0, 255);
+    }
     TheBulletHandler::Instance()->drawBullets();
   }
-  pLevel->render();
-}
-
-bool PlayState::onEnter() {
-  TheGame::Instance()->setPlayerLives(3);
-  // parse the Level
-  LevelParser levelParser;
-  pLevel = levelParser.parseLevel(TheGame::Instance()->getLevelFiles()[TheGame::Instance()->getCurrentLevel()-1].c_str());
-
-  TheTextureManager::Instance()->load("assets/bullet1.png", "bullet1", TheGame::Instance()->getRenderer());
-  TheTextureManager::Instance()->load("assets/bullet2.png", "bullet2", TheGame::Instance()->getRenderer());
-  TheTextureManager::Instance()->load("assets/bullet3.png", "bullet3", TheGame::Instance()->getRenderer());
-  TheTextureManager::Instance()->load("assets/lives.png", "lives", TheGame::Instance()->getRenderer());
-
-  if (pLevel != 0) 
-    m_loadingComplete = true;
-  std::cout << "entering PlayState\n";
-  return true;
 }
 
 bool PlayState::onExit() {

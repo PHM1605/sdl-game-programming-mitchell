@@ -35,6 +35,7 @@ void GameStateMachine::update() {
   }
 }
 
+#include <iostream>
 void GameStateMachine::render() {
   if (!m_gameStates.empty()) {
     m_gameStates.back()->render();

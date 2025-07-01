@@ -1,12 +1,21 @@
-#include "Game.h"
-#include "TextureManager.h"
-#include "Enemy.h"
-#include "InputHandler.h"
-#include "MainMenuState.h"
-#include "PlayState.h"
-#include "MenuButton.h"
 #include "AnimatedGraphic.h"
+#include "Eskeletor.h"
+#include "Game.h"
+#include "GameObjectFactory.h"
 #include "GameOverState.h"
+#include "Glider.h" 
+#include "InputHandler.h"
+#include "Level1Boss.h"
+#include "MainMenuState.h"
+#include "MenuButton.h"
+#include "Player.h"
+#include "RoofTurret.h"
+#include "ScrollingBackground.h"
+#include "ShotGlider.h"
+#include "SoundManager.h"
+#include "TextureManager.h"
+#include "Turret.h"
+
 #include <iostream>
 
 // as Game is Singleton
@@ -69,11 +78,23 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	// // Init Input (Joystick, ...)
 	// TheInputHandler::Instance()->initialiseJoysticks();
 	
+	// add sound effects
+	TheSoundManager::Instance()->load("assets/DST_ElectroRock.ogg", "music1", SOUND_MUSIC);
+	TheSoundManager::Instance()->load("assets/boom.wav", "explode", SOUND_SFX);
+	TheSoundManager::Instance()->load("assets/phaser.wav", "shoot", SOUND_SFX);
+	TheSoundManager::Instance()->playMusic("music1", -1);
+
 	// Register Objects for the Game
 	TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 	TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
 	TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
-
+	TheGameObjectFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
+	TheGameObjectFactory::Instance()->registerType("Turret", new TurretCreator());
+	TheGameObjectFactory::Instance()->registerType("Glider", new GliderCreator());
+	TheGameObjectFactory::Instance()->registerType("ShotGlider", new ShotGliderCreator());
+	TheGameObjectFactory::Instance()->registerType("RoofTurret", new RoofTurretCreator());
+	TheGameObjectFactory::Instance()->registerType("Eskeletor", new EskeletorCreator());
+	TheGameObjectFactory::Instance()->registerType("Level1Boss", new Level1BossCreator());
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MainMenuState());
 	
@@ -89,11 +110,9 @@ void Game::setCurrentLevel(int currentLevel) {
 
 void Game::render() {
 	// clear the window to pre-set color
-	SDL_RenderClear(m_pRenderer);
-	
+	SDL_RenderClear(m_pRenderer);	
 	// render GameStateS
 	m_pGameStateMachine->render();
-
 	// show the window
 	SDL_RenderPresent(m_pRenderer);
 }
