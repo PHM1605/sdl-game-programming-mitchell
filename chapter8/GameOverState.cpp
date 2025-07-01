@@ -34,27 +34,33 @@ void GameOverState::s_restartPlay() {
 bool GameOverState::onEnter() {
   // parse the State
   StateParser stateParser;
-  // stateParser.parseState("test.xml", s_gameOverID, &m_gameObjects, &m_textureIDList);
+  stateParser.parseState("assets/attack.xml", s_gameOverID, &m_gameObjects, &m_textureIDList);
   // setup callbacks for Buttons in State
   m_callbacks.push_back(0);
   m_callbacks.push_back(s_gameOverToMain);
   m_callbacks.push_back(s_restartPlay);
   setCallbacks(m_callbacks);
 
-  std::cout << "entering PauseState\n";
+  std::cout << "entering GameOverState\n";
   return true;
 }
 
 bool GameOverState::onExit() {
-  // clear GameObjects in State
-  for (int i=0; i<m_gameObjects.size(); i++) {
-    m_gameObjects[i]->clean();
+  if (m_loadingComplete && !m_gameObjects.empty()) {
+    // clear GameObjects in State
+    for (int i=0; i<m_gameObjects.size(); i++) {
+      m_gameObjects[i]->clean();
+      delete m_gameObjects[i];
+    } 
+    m_gameObjects.clear();
   }
-  m_gameObjects.clear();
+  std::cout << "After GameOver clear: " << m_gameObjects.size();
+  
   // clear the TextureManager
   for (int i=0; i<m_textureIDList.size(); i++) {
     TheTextureManager::Instance()->clearFromTextureMap(m_textureIDList[i]);
   }
+  TheInputHandler::Instance()->reset();
 
   std::cout << "exiting GameOverState" << std::endl;
   return true;
