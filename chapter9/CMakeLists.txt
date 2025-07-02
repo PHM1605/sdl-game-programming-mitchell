@@ -1,11 +1,26 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(sdl-game-programming-mitchell)
 set(SourceFiles 
+    CollisionManager.cpp
     Game.cpp 
+    GameObjectFactory.cpp
     GameStateMachine.cpp
     InputHandler.cpp
+    Level.cpp
+    LevelParser.cpp
     main.cpp
+    MainMenuState.cpp
+    MenuButton.cpp
+    PlatformerObject.cpp 
+    Player.cpp
+    PlayState.cpp
     SoundManager.cpp
+    StateParser.cpp 
+    TextureManager.cpp
+    tinystr.cpp 
+    tinyxml.cpp 
+    tinyxmlerror.cpp 
+    tinyxmlparser.cpp
 )
 
 find_package(PkgConfig REQUIRED)

@@ -5,9 +5,29 @@
 #include "LoaderParams.h"
 #include "Vector2D.h"
 
+class TileLayer;
+
 class GameObject {
 public:
   virtual ~GameObject() {}
+  virtual void load(std::unique_ptr<LoaderParams> const &pParams) = 0;
+  virtual void draw() = 0;
+  virtual void update() = 0;
+  virtual void clean() = 0;
+  virtual void collision() = 0;
+  virtual std::string type() = 0;
+  
+  Vector2D& getPosition() { return m_position; }
+  Vector2D& getVelocity() { return m_velocity; }
+  int getWidth() { return m_width; }
+  int getHeight() { return m_height; }
+  void scroll(float scrollSpeed) {} // for Platformer do nothing
+  
+  bool updating() { return m_bUpdating; }
+  bool dead() { return m_bDead; }
+  bool dying() { return m_bDying; }
+  void setUpdating(bool updating) { m_bUpdating = updating; }
+  void setCollisionLayers(std::vector<TileLayer*>* layers) { m_pCollisionLayers = layers; }
 
 protected:
   GameObject():
@@ -36,4 +56,7 @@ protected:
   bool m_bDying;
   double m_angle;
   int m_alpha;
+
+  std::vector<TileLayer*>* m_pCollisionLayers;
 };
+// DONE

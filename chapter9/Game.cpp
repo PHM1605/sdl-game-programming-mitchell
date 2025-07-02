@@ -2,8 +2,10 @@
 #include "Game.h"
 #include "GameObjectFactory.h"
 #include "InputHandler.h"
+#include "MainMenuState.h"
 #include "MenuButton.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 
 Game* Game::s_pInstance = 0;
 
@@ -65,12 +67,31 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
   // register types of Objects for the Game
   TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 
+  m_pGameStateMachine = new GameStateMachine();
+  m_pGameStateMachine->changeState(new MainMenuState());
+
   m_bRunning = true;
   return true;
 }
 
+void Game::setCurrentLevel(int currentLevel) {
+  m_currentLevel = currentLevel;
+  // m_pGameStateMachine->changeState(new GameOverState());
+  m_bLevelComplete = false;
+}
+
+void Game::render() {
+  SDL_RenderClear(m_pRenderer);
+  m_pGameStateMachine->render();
+  SDL_RenderPresent(m_pRenderer);
+}
+
 void Game::handleEvents() {
   TheInputHandler::Instance()->update();
+}
+
+void Game::update() {
+  m_pGameStateMachine->update();
 }
 
 void Game::clean() {
@@ -78,7 +99,11 @@ void Game::clean() {
   // close Joysticks
   TheInputHandler::Instance()->clean(); 
   // clean StateMachine
+  m_pGameStateMachine->clean();
+  m_pGameStateMachine = nullptr;
+  delete m_pGameStateMachine;
   // clean TextureMap
+  TheTextureManager::Instance()->clearTextureMap();
 
   // close Window and Renderer
   SDL_DestroyWindow(m_pWindow);
