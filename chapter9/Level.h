@@ -40,7 +40,7 @@ private:
   Player* m_pPlayer;
   
   std::vector<Layer*> m_layers;
-  std::vector<Tileset> m_tilesets;
+  std::vector<Tileset> m_tilesets; // will be push_back() in LevelParser (parseTilesets() function)
   std::vector<TileLayer*> m_collisionLayers;
 };
 // DONE

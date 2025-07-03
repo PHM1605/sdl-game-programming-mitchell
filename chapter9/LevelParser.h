@@ -9,6 +9,7 @@ public:
 private:
   void parseTextures(TiXmlElement* pTextureRoot);
   void parseTilesets(TiXmlElement* pTilesetRoot, std::vector<Tileset>* pTilesets);
+  // pLayers: ObjectLayer, TileLayer
   void parseObjectLayer(TiXmlElement* pObjectElement, std::vector<Layer*> *pLayers, Level* pLevel);
   void parseTileLayer(TiXmlElement* pTileElement, std::vector<Layer*>* pLayers, const std::vector<Tileset>* pTilesets, std::vector<TileLayer*> *pCollisionLayers);
 

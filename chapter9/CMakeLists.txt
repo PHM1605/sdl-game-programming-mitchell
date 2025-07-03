@@ -11,6 +11,7 @@ set(SourceFiles
     main.cpp
     MainMenuState.cpp
     MenuButton.cpp
+    ObjectLayer.cpp
     PlatformerObject.cpp 
     Player.cpp
     PlayState.cpp

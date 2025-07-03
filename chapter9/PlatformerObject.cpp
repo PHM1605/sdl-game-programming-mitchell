@@ -53,5 +53,13 @@ void PlatformerObject::doDyingAnimation() {
 }
 
 bool PlatformerObject::checkCollideTile(Vector2D newPos) {
-  
+  // check if Object moves outside Game screen
+  if (newPos.m_y + m_height >= TheGame::Instance()->getGameHeight() - 32)
+    return false;
+  else {
+    for (std::vector<TileLayer*>::iterator it = m_pCollisionLayers->begin(); it != m_pCollisionLayers->end(); ++it) {
+      TileLayer* pTileLayer = (*it);
+      
+    }
+  }
 }

@@ -16,6 +16,7 @@ public:
 
 protected:
   PlatformerObject();
+  // check whether 'newPos' causes a collision
   bool checkCollideTile(Vector2D newPos);
   void doDyingAnimation();
 
