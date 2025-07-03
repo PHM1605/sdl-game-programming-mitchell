@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(sdl-game-programming-mitchell)
 set(SourceFiles 
+    base64.cpp
+    Camera.cpp
     CollisionManager.cpp
     Game.cpp 
     GameObjectFactory.cpp
@@ -15,9 +17,11 @@ set(SourceFiles
     PlatformerObject.cpp 
     Player.cpp
     PlayState.cpp
+    ScrollingBackground.cpp
     SoundManager.cpp
     StateParser.cpp 
     TextureManager.cpp
+    TileLayer.cpp
     tinystr.cpp 
     tinyxml.cpp 
     tinyxmlerror.cpp 

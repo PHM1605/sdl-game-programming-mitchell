@@ -1,8 +1,11 @@
+#include "base64.h"
 #include "Level.h"
 #include "LevelParser.h"
 #include "TextureManager.h"
+#include "TileLayer.h"
 #include "Game.h"
 #include "ObjectLayer.h"
+#include "zlib.h"
 
 Level* LevelParser::parseLevel(const char* levelFile) {
   TiXmlDocument levelDocument;
@@ -156,7 +159,62 @@ void LevelParser::parseObjectLayer(TiXmlElement* pObjectElement, std::vector<Lay
   }
   pLayers->push_back(pObjectLayer);
 }
-
-void LevelParser::parseTileLayer() {
+// pTileElement:
+//  <layer name="Overlay" width="200" height="15">
+//    <properties>
+//      <property name="collidable" value="true"/>
+//    </properties>
+//    <data encoding="base64" compression="zlib">
+//      xxx
+//    </data>
+//  </layer>
+// pLayers: pointing to vector of TileLayer, ObjectLayer
+// pCollisionLayers: pointing to vector of TileLayers
+void LevelParser::parseTileLayer(TiXmlElement* pTileElement, std::vector<Layer*> *pLayers, const std::vector<Tileset> *pTilesets, std::vector<TileLayer*> *pCollisionLayers) {
+  // m_width, m_height: [cell]
   TileLayer* pTileLayer = new TileLayer(m_tileSize, m_width, m_height, *pTilesets);
+  bool collidable = false;
+  std::vector<std::vector<int>> data;
+  std::string decodedIDs; 
+  TiXmlElement* pDataNode;
+  for (TiXmlElement* e = pTileElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+    if (e->Value() == std::string("properties")) {
+      for (TiXmlElement* property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
+        if (property->Value() == std::string("property")) {
+          if (property->Attribute("name") == std::string("collidable"))
+            collidable = true;
+        }
+      }
+    }
+
+    if (e->Value() == std::string("data"))
+      pDataNode = e;
+  }
+  // pDataNode now points to <data/>
+  for (TiXmlNode* e = pDataNode->FirstChild(); e != NULL; e = e->NextSibling()) {
+    TiXmlText* text = e->ToText();
+    std::string t = text->Value();
+    decodedIDs = base64_decode(t);
+  }
+  // uncompress zlib compression for tileIDs data
+  uLongf sizeofids = m_width * m_height * sizeof(int); // size of whole Tilemap of ints
+  std::vector<int> ids(m_width * m_height);
+  uncompress((Bytef*)&ids[0], &sizeofids, (const Bytef*)decodedIDs.c_str(), decodedIDs.size());
+  // create buffer to store data in terms of vector<vector<int>>
+  std::vector<int> layerRow(m_width);
+  for (int j=0; j<m_height; j++) {
+    data.push_back(layerRow);
+  }
+  // storing data into vector<vector<int>>
+  for (int rows = 0; rows<m_height; rows++){
+    for (int cols = 0; cols<m_width; cols++) {
+      data[rows][cols] = ids[rows*m_width+cols];
+    }
+  }
+  pTileLayer->setTileIDs(data);
+  // store TileLayer with 'collidable' property as a separate vector
+  if (collidable) {
+    pCollisionLayers->push_back(pTileLayer);
+  }
+  pLayers->push_back(pTileLayer);
 }

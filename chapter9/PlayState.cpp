@@ -12,9 +12,9 @@ void PlayState::update() {
 
 void PlayState::render() {
   if (m_loadingComplete) {
-    // if (pLevel != 0) {
-    //   pLevel->render();
-    // }
+    if (pLevel != 0) {
+      pLevel->render();
+    }
   }
 }
 

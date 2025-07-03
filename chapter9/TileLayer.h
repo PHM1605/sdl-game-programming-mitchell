@@ -25,13 +25,14 @@ public:
 
   Tileset getTilesetByID(int tileID);
 private:
-// m_mapWidth = m_numColumns: whole TileLayer width, in terms of #cells
+  // m_mapWidth = m_numColumns: whole TileLayer width [cell]
   int m_mapWidth; 
   int m_numColumns;
+  // m_numRows: whole TileLayer height [cell] 
   int m_numRows;
   int m_tileSize;
 
-  Vector2D m_position; // position of Game screen on Map
+  Vector2D m_position; // position of Game screen on Map - no use in Platformer
   Vector2D m_velocity;
   Vector2D m_acceleration;
 

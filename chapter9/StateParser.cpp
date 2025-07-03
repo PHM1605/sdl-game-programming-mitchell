@@ -56,7 +56,6 @@ bool StateParser::parseState(const char* stateFile, std::string stateID, std::ve
     }
   }
   parseObjects(pObjectRoot, pObjects);
-  std::cout << pObjects->size() << pTextureIDs->size() << std::endl;
   return true;
 }
 

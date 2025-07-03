@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "PlatformerObject.h"
 #include "TextureManager.h"
+#include "TileLayer.h"
 
 PlatformerObject::PlatformerObject():
   GameObject(),
@@ -52,6 +53,7 @@ void PlatformerObject::doDyingAnimation() {
   m_dyingCounter++;
 }
 
+// we modified this function a bit, as there is nothing like a GameScreen, but we use a Camera
 bool PlatformerObject::checkCollideTile(Vector2D newPos) {
   // check if Object moves outside Game screen
   if (newPos.m_y + m_height >= TheGame::Instance()->getGameHeight() - 32)
@@ -59,7 +61,28 @@ bool PlatformerObject::checkCollideTile(Vector2D newPos) {
   else {
     for (std::vector<TileLayer*>::iterator it = m_pCollisionLayers->begin(); it != m_pCollisionLayers->end(); ++it) {
       TileLayer* pTileLayer = (*it);
+      std::vector<std::vector<int>> tiles = pTileLayer->getTileIDs();
+      Vector2D layerPos = pTileLayer->getPosition(); // (0,0)
       
+      int tileColumn, tileRow, tileid = 0;
+      // startPos is a bit inside Object top-left
+      // endPos is a bit inside Object bottom-right 
+      Vector2D startPos = newPos;
+      startPos.m_x += 15;
+      startPos.m_y += 20;
+      Vector2D endPos(newPos.m_x+m_width-15, newPos.m_y+m_height-4);
+      // whether any point inside Object belongs to a Collidable cell
+      for (int i = startPos.m_x; i < endPos.m_x; i++) {
+        for (int j = startPos.m_y; j < endPos.m_y; j++) {
+          tileColumn = i / pTileLayer->getTileSize();
+          tileRow = j / pTileLayer->getTileSize();
+          tileid = tiles[tileRow][tileColumn];
+          if (tileid != 0)
+            return true;
+        }
+      }
     }
+    return false;
   }
 }
+// DONE

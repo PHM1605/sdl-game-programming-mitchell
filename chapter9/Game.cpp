@@ -4,6 +4,9 @@
 #include "InputHandler.h"
 #include "MainMenuState.h"
 #include "MenuButton.h"
+#include "Player.h"
+#include "ScrollingBackground.h"
+#include "Snail.h"
 #include "SoundManager.h"
 #include "TextureManager.h"
 
@@ -66,6 +69,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
   // register types of Objects for the Game
   TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+  TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
+  // TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
+  TheGameObjectFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
+  TheGameObjectFactory::Instance()->registerType("Snail", new SnailCreator());
 
   m_pGameStateMachine = new GameStateMachine();
   m_pGameStateMachine->changeState(new MainMenuState());
