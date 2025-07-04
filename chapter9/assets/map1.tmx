@@ -4,6 +4,7 @@
   <property name="clouds" value="assets/prehistoric.png"/>
   <property name="player" value="assets/player.png"/>
   <property name="snail" value="assets/snail.png"/>
+  <property name="lives" value="assets/lives.png"/>
  </properties>
  <tileset firstgid="1" name="blocks1" tilewidth="32" tileheight="32" spacing="2" margin="2">
   <image source="blocks1.png" width="614" height="376"/>

@@ -23,12 +23,12 @@ void PlayState::update() {
 void PlayState::render() {
   if (m_loadingComplete) {
     if (pLevel != 0) {
-      pLevel->render();
+      // pLevel->render();
     }
 
-    // for (int i=0; i<TheGame::Instance()->getPlayerLives(); i++) {
-    //   TheTextureManager::Instance()->drawFrame("lives", i*30, 0, 32, 30, 0, 0, TheGame::Instance()->getRenderer(), 0.0, 255);
-    // }
+    for (int i=0; i<TheGame::Instance()->getPlayerLives(); i++) {
+      TheTextureManager::Instance()->drawFrame("lives", i*30, 0, 32, 30, 0, 0, TheGame::Instance()->getRenderer(), 0.0, 255);
+    }
   }
 }
 
