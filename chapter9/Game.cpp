@@ -1,6 +1,8 @@
 #include <iostream>
+#include "AnimatedGraphic.h"
 #include "Game.h"
 #include "GameObjectFactory.h"
+#include "GameOverState.h"
 #include "InputHandler.h"
 #include "MainMenuState.h"
 #include "MenuButton.h"
@@ -70,7 +72,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
   // register types of Objects for the Game
   TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
   TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
-  // TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
+  TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
   TheGameObjectFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
   TheGameObjectFactory::Instance()->registerType("Snail", new SnailCreator());
 
@@ -83,7 +85,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 void Game::setCurrentLevel(int currentLevel) {
   m_currentLevel = currentLevel;
-  // m_pGameStateMachine->changeState(new GameOverState());
+  m_pGameStateMachine->changeState(new GameOverState());
   m_bLevelComplete = false;
 }
 

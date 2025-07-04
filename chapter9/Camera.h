@@ -21,7 +21,7 @@ private:
   Camera();
   ~Camera();
 
-  Vector2D* m_pTarget; // Camera's target (don't really understand this, but seems like it isn't set anywhere, so no effect)
+  Vector2D* m_pTarget; // Camera's target (top left of Player)
   Vector2D m_position; // Camera's position in full Tilemap
   static Camera* s_pCamera;
 };

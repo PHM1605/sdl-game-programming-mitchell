@@ -18,6 +18,7 @@ void ObjectLayer::update(Level* pLevel) {
 }
 
 void ObjectLayer::render() {
+  std::cout << "WERE RE";
   for (int i=0; i<m_gameObjects.size(); i++) {
     m_gameObjects[i]->draw();
   }

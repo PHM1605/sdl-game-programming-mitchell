@@ -7,7 +7,7 @@ MenuButton::MenuButton():
 
 void MenuButton::load(std::unique_ptr<LoaderParams> const &pParams) {
   PlatformerObject::load(pParams);
-  m_callbackID = pParams->getCallbackID();
+  m_callbackID = pParams->getCallbackID(); // callbackID of Button will be set in 'conan.xml' file
   m_currentFrame = MOUSE_OUT;
 }
 

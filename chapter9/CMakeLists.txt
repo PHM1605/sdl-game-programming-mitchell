@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(sdl-game-programming-mitchell)
 set(SourceFiles 
+    AnimatedGraphic.cpp
     base64.cpp
     Camera.cpp
     CollisionManager.cpp
     Game.cpp 
     GameObjectFactory.cpp
     GameStateMachine.cpp
+    GameOverState.cpp
     InputHandler.cpp
     Level.cpp
     LevelParser.cpp
@@ -14,6 +16,7 @@ set(SourceFiles
     MainMenuState.cpp
     MenuButton.cpp
     ObjectLayer.cpp
+    PauseState.cpp
     PlatformerObject.cpp 
     Player.cpp
     PlayState.cpp

@@ -1,13 +1,23 @@
+#include "PauseState.h"
 #include "PlayState.h"
 #include "InputHandler.h"
 #include "Game.h"
+#include "GameOverState.h"
 #include "LevelParser.h"
 #include "TextureManager.h"
 
 const std::string PlayState::s_playID = "PLAY";
 
 void PlayState::update() {
-
+  if (m_loadingComplete && !m_exiting) {
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+      TheGame::Instance()->getStateMachine()->pushState(new PauseState());
+    }
+    if (TheGame::Instance()->getPlayerLives() == 0) 
+      TheGame::Instance()->getStateMachine()->changeState(new GameOverState());
+    if (pLevel != 0)
+      pLevel->update();
+  }
 }
 
 void PlayState::render() {
@@ -15,6 +25,10 @@ void PlayState::render() {
     if (pLevel != 0) {
       pLevel->render();
     }
+
+    // for (int i=0; i<TheGame::Instance()->getPlayerLives(); i++) {
+    //   TheTextureManager::Instance()->drawFrame("lives", i*30, 0, 32, 30, 0, 0, TheGame::Instance()->getRenderer(), 0.0, 255);
+    // }
   }
 }
 
@@ -35,3 +49,4 @@ bool PlayState::onExit() {
   std::cout << "exiting PlayState\n";
   return true;
 }
+// DONE

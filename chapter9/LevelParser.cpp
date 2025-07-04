@@ -52,6 +52,9 @@ Level* LevelParser::parseLevel(const char* levelFile) {
   //   ...
   // </objectgroup>  
   // <layer name="Overlay" width="200" height="15">
+  //   <properties>
+  //    <property name="collidable" value="true"/>
+  //   </properties>
   //   <data encoding="base64" compression="zlib">
   //     xxx
   //   </data>
@@ -59,13 +62,16 @@ Level* LevelParser::parseLevel(const char* levelFile) {
   for (TiXmlElement* e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
     if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
       if (e->FirstChildElement()->Value() == std::string("object")) {
-        parseObjectLayer(e, pLevel->getLayers(), pLevel);
-      } else if (e->FirstChildElement()->Value() == std::string("data")) {
+        // parseObjectLayer(e, pLevel->getLayers(), pLevel);
+      } else if (e->FirstChildElement()->Value() == std::string("data")
+        || (e->FirstChildElement()->NextSiblingElement() != 0 && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data"))) {
         parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets(), pLevel->getCollisionLayers());
       }
     }
   }
-  
+  std::cout << "#tile layers: " << pLevel->getLayers()->size() << std::endl; // "Bottom", "Collision", "Overlay", "Overlay 2"
+  std::cout << "#collision layers: " <<pLevel->getCollisionLayers()->size() << std::endl; // "Collision"
+  std::cout << "#tilesets: " << pLevel->getTilesets()->size() << std::endl;
   return pLevel;
 }
 
