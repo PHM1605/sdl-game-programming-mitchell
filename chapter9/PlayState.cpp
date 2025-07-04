@@ -23,7 +23,7 @@ void PlayState::update() {
 void PlayState::render() {
   if (m_loadingComplete) {
     if (pLevel != 0) {
-      // pLevel->render();
+      pLevel->render();
     }
 
     for (int i=0; i<TheGame::Instance()->getPlayerLives(); i++) {

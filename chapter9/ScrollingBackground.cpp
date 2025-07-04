@@ -12,6 +12,7 @@ ScrollingBackground::ScrollingBackground():
 void ScrollingBackground::load(std::unique_ptr<LoaderParams> const &pParams) {
   PlatformerObject::load(pParams);
   m_scrollSpeed = 1;
+  std::cout << m_width << std::endl;
   // source rect 1 starting location will be increased (width reduced)
   m_srcRect1.x = 0;
   m_srcRect1.y = 0;
@@ -32,11 +33,19 @@ void ScrollingBackground::load(std::unique_ptr<LoaderParams> const &pParams) {
   m_destRect2.y = m_position.getY();
   m_destRect2.w = 0;
   m_destRect2.h = m_height;
+  
 }
 
 void ScrollingBackground::draw() {
+  // std::cout << "DEBUG1\n";
+  // std::cout << m_srcRect1.w << std::endl;
+  // std::cout << m_textureID << " " << m_srcRect1.x << " " << m_srcRect1.y << " " << m_srcRect1.w << " " << m_srcRect1.h << std::endl;
+  // std::cout << m_textureID << " " << m_destRect1.x << " " << m_destRect1.y << " " << m_destRect1.w << " " << m_destRect1.h << std::endl;
   // draw first rect, from start to middle (middle will move backward)
   SDL_RenderCopyEx(TheGame::Instance()->getRenderer(), TheTextureManager::Instance()->getTextureMap()[m_textureID], &m_srcRect1, &m_destRect1, 0, 0, SDL_FLIP_NONE);
+  // std::cout << "DEBUG2\n";
+  // std::cout << m_textureID << " " << m_srcRect2.x << " " << m_srcRect2.y << " " << m_srcRect2.w << " " << m_srcRect2.h << std::endl;
+  // std::cout << m_textureID << " " << m_destRect2.x << " " << m_destRect2.y << " " << m_destRect2.w << " " << m_destRect2.h << std::endl;
   // draw second rect, from middle to end (middle will move backward)
   SDL_RenderCopyEx(TheGame::Instance()->getRenderer(), TheTextureManager::Instance()->getTextureMap()[m_textureID], &m_srcRect2, &m_destRect2, 0, 0, SDL_FLIP_NONE);
 }
