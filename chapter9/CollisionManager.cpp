@@ -10,7 +10,7 @@ void CollisionManager::checkPlayerEnemyCollision(Player* pPlayer, const std::vec
 
   for (int i=0; i<objects.size(); i++) {
     // !updating() means Object NOT within screen
-    if (objects[i]->type() != std::string("Enemy") && !objects[i]->updating()) {
+    if (objects[i]->type() != std::string("Enemy") || !objects[i]->updating()) {
       continue;
     }
 

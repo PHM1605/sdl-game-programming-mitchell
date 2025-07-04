@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "InputHandler.h"
 #include "Player.h"
+#include "SoundManager.h"
 #include "TextureManager.h"
 #include "TileLayer.h"
 
@@ -27,10 +28,10 @@ void Player::load(std::unique_ptr<LoaderParams> const &pParams) {
 void Player::update() {
   // alive
   if (!m_bDying) {
-    // if falling to the very end bottom
-    if (m_position.m_y + m_height >=470)
+    // if falling to the very end bottom (y=470 -> within row 14)
+    if (m_position.m_y + m_height >=470) {
       collision();
-    
+    }
     handleInput();
 
     // move left
@@ -57,8 +58,9 @@ void Player::update() {
       m_bJumping = false;
     }
     // fall down if not jumping; move up otherwise
-    if (!m_bJumping)
+    if (!m_bJumping) {
       m_velocity.m_y = 5;
+    }      
     else 
       m_velocity.m_y = -5;
 
@@ -76,20 +78,23 @@ void Player::update() {
 }
 
 void Player::draw() {
-  if (m_bFlipped)
+  if (m_bFlipped) {
     TheTextureManager::Instance()->drawFrame(
       m_textureID, 
       (Uint32)m_position.getX()-TheCamera::Instance()->getPosition().m_x, (Uint32)m_position.getY()-TheCamera::Instance()->getPosition().m_y,
       m_width, m_height, m_currentRow, m_currentFrame, 
       TheGame::Instance()->getRenderer(),
       m_angle, m_alpha, SDL_FLIP_HORIZONTAL);
-  else 
+  }  
+  else {
     TheTextureManager::Instance()->drawFrame(
       m_textureID, 
       (Uint32)m_position.getX()-TheCamera::Instance()->getPosition().m_x, (Uint32)m_position.getY()-TheCamera::Instance()->getPosition().m_y,
       m_width, m_height, m_currentRow, m_currentFrame,
       TheGame::Instance()->getRenderer(),
       m_angle, m_alpha);
+  } 
+   
 }
 
 void Player::handleAnimation() {
@@ -150,7 +155,7 @@ void Player::handleAnimation() {
   }
   // dying
   else {
-    m_currentFrame = m_dyingCounter % m_numFrames;
+    m_currentFrame = int(((SDL_GetTicks() / (200)) % m_numFrames));
   }
 }
 
@@ -173,11 +178,6 @@ void Player::handleMovement(Vector2D velocity) {
     m_velocity.m_y = 0;
     // we collided with the map means we are safe on the ground
     m_lastSafePos = m_position;
-    // moves safe position a little bit back
-    if (m_velocity.m_x > 0)
-      m_lastSafePos.m_x -= 32;
-    else if (m_velocity.m_x < 0)
-      m_lastSafePos.m_y += 32;
     m_bCanJump = true;
     m_bJumping = false;
   }
@@ -238,6 +238,7 @@ void Player::handleInput() {
 
   // if press Spacebar & Player is on ground
   if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE) && m_bCanJump && !m_bPressedJump) {
+    TheSoundManager::Instance()->playSound("jump", 0);
     m_bJumping = true;
     m_bCanJump = false;
     m_lastSafePos = m_position;

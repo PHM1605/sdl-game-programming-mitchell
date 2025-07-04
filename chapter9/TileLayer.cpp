@@ -32,7 +32,7 @@ void TileLayer::render() {
         tileset.margin, tileset.spacing, 
         j*m_tileSize-TheCamera::Instance()->getPosition().m_x, i*m_tileSize-TheCamera::Instance()->getPosition().m_y, // destination to draw on screen
         m_tileSize, m_tileSize,
-        id-(tileset.firstGridID-1)/tileset.numColumns, (id-(tileset.firstGridID-1)) % tileset.numColumns,
+        (id-(tileset.firstGridID-1))/tileset.numColumns, (id-(tileset.firstGridID-1)) % tileset.numColumns,
         TheGame::Instance()->getRenderer() 
       );
     }
