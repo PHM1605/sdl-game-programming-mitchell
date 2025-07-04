@@ -3,6 +3,8 @@
 #include <iostream>
 #include "Vector2D.h"
 
+// Note: Camera does not have 'width' or 'height' (which are determined by Game screen)
+// We setup one of 'target' (preferred way) or 'position'
 class Camera {
 public:
   // to make Camera a Singleton

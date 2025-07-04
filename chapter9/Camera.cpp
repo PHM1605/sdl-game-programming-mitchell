@@ -11,6 +11,7 @@ Camera::~Camera() {
   delete m_pTarget;
 }
 
+// Camera top-left is adjusted so that Player is at screen center
 const Vector2D Camera::getPosition() const {
   if (m_pTarget != 0) {
     Vector2D pos(m_pTarget->m_x - TheGame::Instance()->getGameWidth()/2, 0);

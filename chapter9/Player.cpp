@@ -1,7 +1,9 @@
 #include "Camera.h"
 #include "Game.h"
+#include "InputHandler.h"
 #include "Player.h"
 #include "TextureManager.h"
+#include "TileLayer.h"
 
 Player::Player():
   PlatformerObject(),
@@ -91,11 +93,94 @@ void Player::draw() {
 }
 
 void Player::handleAnimation() {
+  // if Player is invulnerable we can flash its alpha to let people know
+  if (m_bInvulnerable) {
+    // invulnerable over -> set all values back
+    if (m_invulnerableCounter == m_invulnerableTime) {
+      m_bInvulnerable = false;
+      m_invulnerableCounter = 0;
+      m_alpha = 255;
+    } else {
+      if (m_alpha == 255)
+        m_alpha = 0;
+      else 
+        m_alpha = 255;
+    }
+    m_invulnerableCounter++;
+  }
 
+  if (!m_bDead && !m_bDying) {
+    // jumping
+    if (m_velocity.m_y < 0) {
+      m_currentRow = 2; 
+      m_currentFrame = 2;
+      m_numFrames = 2;
+    } 
+    // falling
+    else if (m_velocity.m_y > 0) {
+      m_currentRow = 3;
+      m_numFrames = 1;
+    }
+    // on ground
+    else {
+      // move left
+      if (m_velocity.getX() < 0) {
+        m_currentRow = 1;
+        m_numFrames = 4;
+        m_bFlipped = true;
+      }
+      // move right
+      else if (m_velocity.getX() > 0) {
+        m_currentRow = 1;
+        m_numFrames = 4;
+        m_bFlipped = false;
+      }
+      // stand still
+      else {
+        m_currentRow = 0;
+        m_numFrames = 1;
+      }
+    }
+
+    if (m_bRunning) {
+      m_currentFrame = int((SDL_GetTicks()/100) % m_numFrames); 
+    } else {
+      m_currentFrame = int((SDL_GetTicks()/120) % m_numFrames);
+    }
+  }
+  // dying
+  else {
+    m_currentFrame = m_dyingCounter % m_numFrames;
+  }
 }
 
 void Player::handleMovement(Vector2D velocity) {
+  Vector2D newPos = m_position;
+  newPos.m_x += velocity.m_x;
+  if (!checkCollideTile(newPos)) {
+    m_position.m_x = newPos.m_x;
+  } else {
+    m_velocity.m_x = 0;
+  }
 
+  newPos = m_position;
+  newPos.m_y += velocity.m_y;
+  if (!checkCollideTile(newPos)) {
+    m_position.m_y = newPos.m_y;
+  } 
+  // when Player collides with something
+  else {
+    m_velocity.m_y = 0;
+    // we collided with the map means we are safe on the ground
+    m_lastSafePos = m_position;
+    // moves safe position a little bit back
+    if (m_velocity.m_x > 0)
+      m_lastSafePos.m_x -= 32;
+    else if (m_velocity.m_x < 0)
+      m_lastSafePos.m_y += 32;
+    m_bCanJump = true;
+    m_bJumping = false;
+  }
 }
 
 void Player::collision() {
@@ -125,5 +210,43 @@ void Player::clean() {
 }
 
 void Player::handleInput() {
-  // if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT) && m_position.m_x < )
+  // Note: -> executes first, then * (we get first vector component, Collision Tilelayer)
+  // mapWidth: in [cell]
+  // when we press "->"
+  if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT) && m_position.m_x < ((*m_pCollisionLayers->begin())->getMapWidth()*32)) {
+    // pressing "A"
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_A)) 
+      m_bRunning = true;
+    else 
+      m_bRunning = false;
+    m_bMoveRight = true;
+    m_bMoveLeft = false;
+  } 
+  // when we press "<-"
+  else if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_LEFT) && m_position.m_x>32) {
+    // pressing "A"
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_A)) 
+      m_bRunning = true;
+    else 
+      m_bRunning = false;
+    m_bMoveRight = false;
+    m_bMoveLeft = true;
+  } else {
+    m_bMoveRight = false;
+    m_bMoveLeft = false;
+  }
+
+  // if press Spacebar & Player is on ground
+  if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE) && m_bCanJump && !m_bPressedJump) {
+    m_bJumping = true;
+    m_bCanJump = false;
+    m_lastSafePos = m_position;
+    m_bPressedJump = true; // we handle the first time pressing Jump only
+  }
+
+  // if we don't press Spacebar anymore and Player on the ground
+  if (!TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE) && m_bCanJump) {
+    m_bPressedJump = false;
+  }
 }
+// DONE

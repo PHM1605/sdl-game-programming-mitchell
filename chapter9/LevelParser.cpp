@@ -62,14 +62,15 @@ Level* LevelParser::parseLevel(const char* levelFile) {
   for (TiXmlElement* e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
     if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
       if (e->FirstChildElement()->Value() == std::string("object")) {
-        // parseObjectLayer(e, pLevel->getLayers(), pLevel);
+        parseObjectLayer(e, pLevel->getLayers(), pLevel);
       } else if (e->FirstChildElement()->Value() == std::string("data")
         || (e->FirstChildElement()->NextSiblingElement() != 0 && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data"))) {
         parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets(), pLevel->getCollisionLayers());
       }
     }
   }
-  std::cout << "#tile layers: " << pLevel->getLayers()->size() << std::endl; // "Bottom", "Collision", "Overlay", "Overlay 2"
+  // 4 TileLayers: "Bottom", "Collision", "Overlay", "Overlay 2"; 2 ObjectLayers: "Object Layer 2", "Object Layer 1"
+  std::cout << "#tile layers: " << pLevel->getLayers()->size() << std::endl; 
   std::cout << "#collision layers: " <<pLevel->getCollisionLayers()->size() << std::endl; // "Collision"
   std::cout << "#tilesets: " << pLevel->getTilesets()->size() << std::endl;
   return pLevel;
