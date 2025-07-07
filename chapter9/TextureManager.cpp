@@ -6,6 +6,10 @@
 
 TextureManager* TextureManager::s_pInstance = 0;
 
+TextureManager::~TextureManager() {
+  clearTextureMap();
+}
+
 bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer) {
   SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
   if (pTempSurface == 0) {
@@ -69,11 +73,25 @@ void TextureManager::drawTile(std::string id, int margin, int spacing, int x, in
 }
 
 void TextureManager::clearTextureMap() {
+  for (auto& pair: m_textureMap) {
+    SDL_DestroyTexture(pair.second);
+  }
   m_textureMap.clear();
 }
 
 void TextureManager::clearFromTextureMap(std::string id) {
-  m_textureMap.erase(id);
+  auto it = m_textureMap.find(id);
+  if (it != m_textureMap.end()) {
+    SDL_DestroyTexture(it->second);
+    m_textureMap.erase(id);
+  }  
+}
+
+void TextureManager::clean() {
+  if (s_pInstance) {
+    delete s_pInstance;
+    s_pInstance = nullptr;
+  }
 }
 
 // DONE

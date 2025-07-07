@@ -113,6 +113,7 @@ void Game::clean() {
   delete m_pGameStateMachine;
   // clean TextureMap
   TheTextureManager::Instance()->clearTextureMap();
+  TheTextureManager::Instance()->clean();
 
   // close Window and Renderer
   SDL_DestroyWindow(m_pWindow);
